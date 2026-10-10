@@ -102,7 +102,23 @@
 ## chmod是改文件/目录权限的命令(一般不这么使用)
 - 1.基本语法：chmod [选项] 权限 文件/目录 
 - 2.数字方式：chmod 755 文件    # rwxr-xr-x         chmod 644 文件    # rw-r--r--            chmod 777 文件    # rwxrwxrwx（不推荐，所有人都能改）
-- 3.符合方式：chmod u+x 文件     # 给所有者加执行权限       chmod g-w 文件     # 去掉属组的写权限       chmod o+r 文件     # 给其他用户加读权限     
+- 3.符号方式：chmod u+x 文件     # 给所有者加执行权限       chmod g-w 文件     # 去掉属组的写权限       chmod o+r 文件     # 给其他用户加读权限     
     chmod a=rw 文件    # 所有人设为读写
 - 4.chown 改属主和属组，chgrp 只改属组。能改属组的活儿 chown hadoop2 文件（改文件的属主）   chown :hadoop 文件（只改文件的属组）    chown hadoop2:hadoop 文件（两个一起改）
     chgrp hadoop 文件（改文件的属组）   chgrp -R hadoop /opt/hadoop（递归改文件的属组），递归会把目录里面所有文件和子目录的属主和属组一起改掉。
+
+## find的基本语法
+- 1.find 的基本语法是 find [路径] [条件] [动作]，按“从哪找、找什么、找到后干嘛”三层来记
+- 2.find 路径 -name "文件名"去对应目录下寻找文件,如果文件名不太清楚可以使用*.后缀代替
+- 3.find 路径 -size +10M,查找对应目录下文件大小大于10M的文件，+10M也可以换成-10M表示文件大小小于这个的，后面的单位可以更改，如果不写符号等于查找相同大小的文件
+- 4.find 路径 -user 用户名，按照属主来查找，看看哪些文件是属于这个用户的
+
+## ps -ef
+- 1.ps -ef 是 Linux 下查看所有进程的标准命令，显示系统里每个进程的完整信息。
+- 2.-e,显示所有进程（every）
+- 3.-f,显示完整格式，含 UID、PPID、启动时间等，UID​ 谁启动的 · PID​ 进程ID · PPID​ 父进程ID · C​ CPU使用率 · STIME​ 启动时间 · TTY​ 终端（?为后台服务） · TIME​ 累计CPU时间  · CMD​ 启动命令
+
+## grep
+- 1.grep 是 Linux 下按行搜索文本内容的命令，核心作用是从文件或命令输出里过滤出包含指定模式的行。
+- 2.在文件里搜字符串,如grep "error" app.log，在app.log里面查找error，如果使用grep -n "error" app.log，还会显示行数
+- 3.配合管道过滤命令输出（最常见），如find 路径 -name "文件名" | grep "error",在找到的文件下再次筛选，配合ps -ef | grep -n "user"来查找,并显示行数，或者配合ll | grep txt也可以
